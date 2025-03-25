@@ -1,0 +1,36 @@
+---
+- name: Install and Configure Nginx on VM
+  hosts: localhost
+  become: yes  # Run tasks as root
+  tasks:
+
+    - name: Install Nginx (Debian-based)
+      apt:
+        name: nginx
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install Nginx (RHEL-based)
+      yum:
+        name: nginx
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Start and Enable Nginx
+      systemd:
+        name: nginx
+        state: started
+      
+
+    - name: Create a sample webpage
+      copy:
+        content: "<h1>Welcome to My Ansible Managed Nginx Server</h1>"
+        dest: /var/www/html/index.html
+      notify: Restart Nginx
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+

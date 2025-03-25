@@ -1,0 +1,18 @@
+---
+- name: WRITING PLAYBOOK FOR INSTALLING GIT
+  hosts: localhost
+  become: yes
+   
+
+  tasks:
+    - name: UPDATE CACHE
+      
+  apt:
+       update_cache: yes
+
+
+    - name: INSTALL GIT 
+      apt:
+       name: git
+       state: present
+      
